@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Excel School Stall – Digital Wallet & Sales Tracker</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="stylesheet" href="style.css">
+  <!-- Offline-ready QR Code Generator & Scanner -->
+  <script src="assets/qrcode.min.js"></script>
+  <script src="assets/html5-qrcode.min.js"></script>
+</head>
+<body>
+  <!-- ==================================================================== -->
+  <!-- TOP APPLICATION NAVBAR -->
+  <!-- ==================================================================== -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-wrapper">
+        <img src="assets/school-logo.png" alt="Excel School Logo" class="brand-logo">
+        <div class="brand-details">
+          <div class="school-name">Excel Matriculation Hr. Sec. School</div>
+          <h1 class="project-title">EXCEL SCHOOL STALL</h1>
+          <div class="project-subtitle">Digital Wallet &amp; Sales Tracker</div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Live Server Status Indicator -->
+        <div class="server-status" id="serverStatusBadge" title="Server Status">
+          <span class="status-dot online"></span>
+          <span class="status-label" id="serverStatusText">Live Server</span>
+        </div>
+
+        <!-- Global Search Trigger -->
+        <button class="header-btn search-trigger-btn" id="openSearchBtn" title="Search Everything">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <span class="btn-text">Search</span>
+        </button>
+
+        <!-- Role Selector Pill -->
+        <div class="role-selector-wrapper">
+          <label for="activeRoleSelect" class="role-label">Mode:</label>
+          <select id="activeRoleSelect" class="role-select">
+            <option value="all">🌐 All Access</option>
+            <option value="student">🎓 Student View</option>
+            <option value="stall">🏪 Stall Operator</option>
+            <option value="admin">⚙️ Admin / Incharge</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desktop Navigation Bar -->
+    <nav class="desktop-nav">
+      <div class="nav-links">
+        <button class="nav-tab active" data-view="home">
+          <span class="nav-icon">🏠</span>
+          <span>Home</span>
+        </button>
+        <button class="nav-tab" data-view="student">
+          <span class="nav-icon">💳</span>
+          <span>Student Wallet</span>
+        </button>
+        <button class="nav-tab" data-view="stall">
+          <span class="nav-icon">🏪</span>
+          <span>Stall POS &amp; Dashboard</span>
+        </button>
+        <button class="nav-tab" data-view="leaderboard">
+          <span class="nav-icon">🏆</span>
+          <span>Sales Leaderboard</span>
+        </button>
+        <button class="nav-tab" data-view="admin">
+          <span class="nav-icon">⚙️</span>
+          <span>Admin Control</span>
+        </button>
+        <button class="nav-tab" data-view="reports">
+          <span class="nav-icon">📊</span>
+          <span>Reports</span>
+        </button>
+      </div>
+      <div class="nav-quick-stat">
+        <span class="quick-stat-badge">
+          Event Total: <strong id="headerTotalSales">₹0</strong>
+        </span>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ==================================================================== -->
+  <!-- MAIN CONTENT CONTAINER -->
+  <!-- ==================================================================== -->
+  <main class="main-container">
+
+    <!-- ================================================================== -->
+    <!-- VIEW 1: HOME OVERVIEW -->
+    <!-- ================================================================== -->
+    <section id="view-home" class="view-panel active">
+      <!-- School Hero Banner -->
+      <div class="hero-banner">
+        <div class="hero-content">
+          <div class="hero-badge">🎓 Annual Business Bazaar &amp; Entrepreneurship Day 2026</div>
+          <h2 class="hero-heading">Welcome to Excel School Stall Bazaar</h2>
+          <p class="hero-desc">
+            Empowering students with hands-on entrepreneurship and cashless digital transactions. Students receive virtual event funds, explore stalls, make purchases, and compete on the live sales leaderboard!
+          </p>
+          <div class="hero-cta-group">
+            <button class="btn btn-primary" onclick="app.switchView('student')">
+              💳 Open Student Wallet
+            </button>
+            <button class="btn btn-secondary" onclick="app.switchView('stall')">
+              🏪 Make a Purchase (POS)
+            </button>
+            <button class="btn btn-gold" onclick="app.switchView('leaderboard')">
+              🏆 View Live Leaderboard
+            </button>
+          </div>
+        </div>
+        <div class="hero-crest-box">
+          <img src="assets/school-logo.png" alt="Excel Crest" class="hero-crest">
+          <div class="motto-tag">School For Excellence</div>
+        </div>
+      </div>
+
+      <!-- Top 4 Event Key Metrics -->
+      <div class="metrics-grid">
+        <div class="metric-card metric-students" onclick="app.switchView('student')">
+          <div class="metric-icon-box">👨‍🎓</div>
+          <div class="metric-info">
+            <span class="metric-title">TOTAL STUDENTS</span>
+            <span class="metric-value" id="homeTotalStudents">0</span>
+            <span class="metric-sub">Registered wallets</span>
+          </div>
+        </div>
+
+        <div class="metric-card metric-stalls" onclick="app.switchView('stall')">
+          <div class="metric-icon-box">🏪</div>
+          <div class="metric-info">
+            <span class="metric-title">ACTIVE STALLS</span>
+            <span class="metric-value" id="homeTotalStalls">0</span>
+            <span class="metric-sub">Business stalls open</span>
+          </div>
+        </div>
+
+        <div class="metric-card metric-sales" onclick="app.switchView('leaderboard')">
+          <div class="metric-icon-box">💰</div>
+          <div class="metric-info">
+            <span class="metric-title">TOTAL EVENT SALES</span>
+            <span class="metric-value text-accent" id="homeTotalSales">₹0</span>
+            <span class="metric-sub">Earned across all stalls</span>
+          </div>
+        </div>
+
+        <div class="metric-card metric-txns" onclick="app.switchView('admin')">
+          <div class="metric-icon-box">🧾</div>
+          <div class="metric-info">
+            <span class="metric-title">TODAY'S TRANSACTIONS</span>
+            <span class="metric-value" id="homeTotalTxns">0</span>
+            <span class="metric-sub">Cashless orders made</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Launch Navigation Cards -->
+      <div class="section-title-wrap">
+        <h3 class="section-title">Quick Action Launchpad</h3>
+        <p class="section-subtitle">Jump straight to any role or dashboard</p>
+      </div>
+
+      <div class="launchpad-grid">
+        <div class="launchpad-card" onclick="app.switchView('student')">
+          <div class="lp-icon">💳</div>
+          <div class="lp-body">
+            <h4>Student Wallet</h4>
+            <p>Check available balance, inspect personal purchase history, and show your student QR code.</p>
+          </div>
+          <span class="lp-arrow">→</span>
+        </div>
+
+        <div class="launchpad-card" onclick="app.switchView('stall')">
+          <div class="lp-icon">🛒</div>
+          <div class="lp-body">
+            <h4>Stall POS &amp; Dashboard</h4>
+            <p>Scan student QR, choose items, verify student funds, and instantly register sales.</p>
+          </div>
+          <span class="lp-arrow">→</span>
+        </div>
+
+        <div class="launchpad-card" onclick="app.switchView('leaderboard')">
+          <div class="lp-icon">🏆</div>
+          <div class="lp-body">
+            <h4>Sales Leaderboard</h4>
+            <p>Watch live stall sales rankings update automatically in real-time as purchases occur.</p>
+          </div>
+          <span class="lp-arrow">→</span>
+        </div>
+
+        <div class="launchpad-card" onclick="app.switchView('admin')">
+          <div class="lp-icon">⚙️</div>
+          <div class="lp-body">
+            <h4>Admin Dashboard</h4>
+            <p>Allocate ₹100 starting funds, manage stalls, edit prices, reverse accidental orders, view charts.</p>
+          </div>
+          <span class="lp-arrow">→</span>
+        </div>
+      </div>
+
+      <!-- Live Home Feeds (Recent Purchases & Top Stalls) -->
+      <div class="home-two-col">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">⚡ Live Purchases Feed</h3>
+            <button class="btn btn-xs btn-outline" onclick="app.refreshData()">Refresh</button>
+          </div>
+          <div class="card-body p-0">
+            <div class="feed-list" id="homeRecentPurchases">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">🏆 Top Performing Stalls</h3>
+            <button class="btn btn-xs btn-link" onclick="app.switchView('leaderboard')">Full Board →</button>
+          </div>
+          <div class="card-body p-0">
+            <div class="top-stalls-list" id="homeTopStallsList">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- VIEW 2: STUDENT WALLET -->
+    <!-- ================================================================== -->
+    <section id="view-student" class="view-panel">
+      <div class="view-header-row">
+        <div>
+          <h2 class="view-heading">🎓 Student Digital Wallet</h2>
+          <p class="view-sub">View personal wallet balance, purchase transactions, and your student QR pass.</p>
+        </div>
+
+        <!-- Student Selector Dropdown -->
+        <div class="student-select-box">
+          <label for="currentStudentSelect">Select Student:</label>
+          <select id="currentStudentSelect" class="form-control" onchange="app.selectStudent(this.value)">
+            <!-- Populated via JS -->
+          </select>
+        </div>
+      </div>
+
+      <div class="student-wallet-layout">
+        <!-- Left: Digital Wallet Card & Student ID Badge -->
+        <div class="wallet-column">
+          <!-- Large Virtual Wallet Card -->
+          <div class="wallet-card">
+            <div class="wallet-card-chip"></div>
+            <div class="wallet-school-brand">
+              <img src="assets/school-logo.png" alt="Excel School" class="wallet-logo">
+              <div class="wallet-school-text">
+                <strong>EXCEL MATRICULATION HR. SEC. SCHOOL</strong>
+                <span>Student Virtual Event Wallet</span>
+              </div>
+            </div>
+
+            <div class="wallet-balance-container">
+              <span class="wallet-balance-label">AVAILABLE BALANCE</span>
+              <div class="wallet-balance-amount" id="studentWalletBalance">₹100</div>
+              <div class="wallet-status-tag" id="studentWalletStatus">Active • Ready to Spend</div>
+            </div>
+
+            <div class="wallet-meta-row">
+              <div>
+                <span class="meta-label">STUDENT NAME</span>
+                <strong class="meta-val" id="studentWalletName">Hari</strong>
+              </div>
+              <div>
+                <span class="meta-label">STUDENT ID</span>
+                <strong class="meta-val font-mono" id="studentWalletId">STU001</strong>
+              </div>
+              <div>
+                <span class="meta-label">CLASS / SEC</span>
+                <strong class="meta-val" id="studentWalletClass">12 - A</strong>
+              </div>
+            </div>
+
+            <div class="wallet-financial-summary">
+              <div class="fin-stat">
+                <span class="fin-label">Starting Balance:</span>
+                <span class="fin-value" id="studentStartingBal">₹100</span>
+              </div>
+              <div class="fin-stat">
+                <span class="fin-label">Total Spent:</span>
+                <span class="fin-value text-spent" id="studentTotalSpent">₹0</span>
+              </div>
+            </div>
+
+            <div class="wallet-topup-row mt-3">
+              <button type="button" class="btn btn-sm btn-gold btn-block" onclick="app.openTopUpModal(app.currentStudentId)">
+                💰 Add / Top-Up Wallet Funds
+              </button>
+            </div>
+          </div>
+
+          <!-- Student QR Pass Card -->
+          <div class="card student-qr-card">
+            <div class="card-header">
+              <h3 class="card-title">📱 Student QR Code</h3>
+              <span class="badge badge-info">Scan to Pay</span>
+            </div>
+            <div class="card-body text-center">
+              <p class="text-muted text-sm mb-2">Show this QR code to any stall operator to make quick purchases without cash!</p>
+              <div class="qr-canvas-wrapper" id="studentQrCanvas"></div>
+              <div class="mt-2 font-mono font-bold text-navy" id="studentQrCodeText">STU001</div>
+              <div class="mt-3">
+                <button class="btn btn-sm btn-outline" onclick="window.print()">🖨️ Print Student Pass</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Transaction History & Stalls Menu Directory -->
+        <div class="history-column">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">📜 My Purchase History</h3>
+              <span class="badge badge-neutral" id="studentTxnCountBadge">0 Purchases</span>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Time</th>
+                      <th>Stall</th>
+                      <th>Item</th>
+                      <th>Qty</th>
+                      <th>Amount</th>
+                      <th>Remaining Balance</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="studentTxnTableBody">
+                    <!-- Populated via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stalls and Product Directory -->
+          <div class="card mt-4">
+            <div class="card-header">
+              <h3 class="card-title">🏪 Explore Event Stalls &amp; Menu</h3>
+              <span class="text-sm text-muted">What can you buy today?</span>
+            </div>
+            <div class="card-body">
+              <div class="stall-catalog-grid" id="studentStallCatalog">
+                <!-- Populated via JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- VIEW 3: STALL POS & SALES DASHBOARD -->
+    <!-- ================================================================== -->
+    <section id="view-stall" class="view-panel">
+      <div class="view-header-row">
+        <div>
+          <h2 class="view-heading">🏪 Stall Operator POS &amp; Dashboard</h2>
+          <p class="view-sub">Process student purchases, scan QR codes, check balances, and track stall sales in real-time.</p>
+        </div>
+
+        <!-- Stall Switcher -->
+        <div class="stall-select-box">
+          <label for="currentStallSelect">Active Stall:</label>
+          <select id="currentStallSelect" class="form-control" onchange="app.selectStall(this.value)">
+            <!-- Populated via JS -->
+          </select>
+        </div>
+      </div>
+
+      <!-- Current Stall Performance Metrics -->
+      <div class="stall-header-card">
+        <div class="stall-header-info">
+          <div>
+            <span class="stall-badge-tag" id="stallIdBadge">STALL01</span>
+            <h2 class="stall-banner-name" id="stallBannerName">Mystery Shop</h2>
+            <p class="stall-team-name" id="stallTeamName">Operated by Team Sphinx (Grade 12)</p>
+          </div>
+          <div class="mt-2">
+            <button type="button" class="btn btn-sm btn-outline" onclick="app.openStallQrModal(app.currentStallId)">
+              📱 Stall QR Code
+            </button>
+          </div>
+        </div>
+        <div class="stall-stats-strip">
+          <div class="s-stat">
+            <span class="s-stat-label">TODAY'S SALES</span>
+            <span class="s-stat-val text-accent" id="stallTotalSales">₹0</span>
+          </div>
+          <div class="s-stat">
+            <span class="s-stat-label">TRANSACTIONS</span>
+            <span class="s-stat-val" id="stallTxnCount">0</span>
+          </div>
+          <div class="s-stat">
+            <span class="s-stat-label">PRODUCTS SOLD</span>
+            <span class="s-stat-val" id="stallItemsSold">0</span>
+          </div>
+          <div class="s-stat">
+            <span class="s-stat-label">AVG. PURCHASE</span>
+            <span class="s-stat-val" id="stallAvgPurchase">₹0.00</span>
+          </div>
+          <div class="s-stat">
+            <span class="s-stat-label">CUSTOMERS</span>
+            <span class="s-stat-val" id="stallUniqueCustomers">0</span>
+          </div>
+          <div class="s-stat">
+            <span class="s-stat-label">TOP PRODUCT</span>
+            <span class="s-stat-val font-sm" id="stallBestSeller">-</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- POS Register & Live Sales Grid -->
+      <div class="pos-layout-grid">
+        <!-- Left: Make Purchase POS Box -->
+        <div class="card pos-register-card">
+          <div class="card-header bg-navy text-white">
+            <h3 class="card-title text-white">🛒 Make Purchase (Point of Sale)</h3>
+            <button class="btn btn-sm btn-gold" onclick="app.openQrScanner()">
+              📷 Scan Student QR
+            </button>
+          </div>
+          <div class="card-body">
+            <form id="posPurchaseForm" onsubmit="app.handlePosSubmit(event)">
+              <!-- Student Selection -->
+              <div class="form-group">
+                <div class="flex-between">
+                  <label class="form-label font-bold" for="posStudentSelect">1. Student Name / ID:</label>
+                  <button type="button" class="btn-text-link" onclick="app.openQrScanner()">[Scan QR with Camera]</button>
+                </div>
+                <input type="text" id="posStudentFilter" class="form-control form-control-sm mb-1" placeholder="🔍 Quick Filter Student Name or ID..." oninput="app.filterPosStudentSelect(this.value)">
+                <select id="posStudentSelect" class="form-control form-control-lg" onchange="app.onPosStudentChange(this.value)" required>
+                  <option value="">-- Choose Student --</option>
+                  <!-- Populated via JS -->
+                </select>
+              </div>
+
+              <!-- Live Student Balance Card -->
+              <div class="pos-student-preview" id="posStudentPreviewBox">
+                <div class="preview-inner">
+                  <div>
+                    <span class="preview-sub">Selected Student</span>
+                    <h4 class="preview-name" id="posStudentName">Select a student above</h4>
+                    <span class="text-xs text-muted" id="posStudentMeta">Class &amp; Section</span>
+                  </div>
+                  <div class="text-right">
+                    <span class="preview-sub">Available Balance</span>
+                    <div class="preview-bal text-navy" id="posStudentAvailableBal">₹0</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Product Selection -->
+              <div class="form-group mt-3">
+                <div class="flex-between">
+                  <label class="form-label font-bold" for="posProductSelect">2. Select Product:</label>
+                  <button type="button" class="btn-text-link" onclick="app.togglePosCustomItem(true)">[+ Manual Custom Item]</button>
+                </div>
+                <select id="posProductSelect" class="form-control form-control-lg" onchange="app.onPosProductChange()" required>
+                  <option value="">-- Choose Product --</option>
+                  <!-- Populated based on active stall -->
+                </select>
+
+                <!-- Manual Custom Item Entry Box -->
+                <div id="posCustomItemBox" class="custom-item-box mt-3" style="display: none;">
+                  <div class="flex-between mb-2">
+                    <strong class="text-navy text-sm">✨ Manual Custom Item Entry</strong>
+                    <button type="button" class="btn-text-link" onclick="app.togglePosCustomItem(false)">[Back to Menu]</button>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="posCustomName">Item Name:</label>
+                    <input type="text" id="posCustomName" class="form-control" placeholder="e.g. Samosa Chaat / Combo" oninput="app.onPosCustomChange()">
+                  </div>
+                  <div class="form-group mt-2">
+                    <label class="form-label" for="posCustomPrice">Item Price (₹):</label>
+                    <input type="number" id="posCustomPrice" class="form-control" min="1" step="1" placeholder="e.g. 25" oninput="app.onPosCustomChange()">
+                  </div>
+                  <div class="form-check mt-2">
+                    <label class="text-xs text-muted cursor-pointer">
+                      <input type="checkbox" id="posSaveToMenu" checked> Save this item to stall menu for future orders
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quantity Selector & Price Math -->
+              <div class="pos-calc-grid mt-3">
+                <div class="form-group">
+                  <label class="form-label" for="posQuantity">Quantity:</label>
+                  <div class="qty-stepper">
+                    <button type="button" class="qty-btn" onclick="app.adjustQty(-1)">−</button>
+                    <input type="number" id="posQuantity" class="qty-input" min="1" max="50" value="1" oninput="app.onPosQtyChange()">
+                    <button type="button" class="qty-btn" onclick="app.adjustQty(1)">+</button>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Unit Price:</label>
+                  <div class="pos-math-box" id="posUnitPrice">₹0</div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label font-bold">Total Amount:</label>
+                  <div class="pos-math-box pos-math-total" id="posTotalAmount">₹0</div>
+                </div>
+              </div>
+
+              <!-- Live Balance Math Verification (Formula Preview) -->
+              <div class="balance-math-strip mt-3" id="posBalanceMathStrip">
+                <div class="math-item">
+                  <span>Student Balance:</span>
+                  <strong id="mathCurrentBal">₹0</strong>
+                </div>
+                <div class="math-operator">−</div>
+                <div class="math-item">
+                  <span>Purchase:</span>
+                  <strong class="text-danger" id="mathPurchaseTotal">₹0</strong>
+                </div>
+                <div class="math-operator">=</div>
+                <div class="math-item">
+                  <span>Remaining:</span>
+                  <strong class="text-success" id="mathRemainingBal">₹0</strong>
+                </div>
+              </div>
+
+              <!-- Warning Box for Insufficient Balance -->
+              <div class="alert alert-danger mt-3" id="posInsufficientWarning" style="display: none;">
+                <strong>⚠️ Insufficient Balance!</strong>
+                <p class="m-0 text-sm">The student does not have enough virtual balance for this purchase. Transaction cannot proceed.</p>
+              </div>
+
+              <!-- Confirm Purchase Button -->
+              <div class="mt-4">
+                <button type="submit" class="btn btn-primary btn-block btn-lg" id="posConfirmBtn" disabled>
+                  ✅ CONFIRM PURCHASE (₹0)
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Right: Stall Products Menu & Recent Transactions -->
+        <div class="pos-stall-side">
+          <!-- Stall Products Card -->
+          <div class="card mb-4">
+            <div class="card-header flex-between">
+              <div>
+                <h3 class="card-title">📋 Products &amp; Prices</h3>
+                <span class="badge badge-primary" id="stallProductCountBadge">0 Items</span>
+              </div>
+              <button class="btn btn-xs btn-outline" onclick="app.openAddProductModal(app.currentStallId)">+ Add Product</button>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Product Name</th>
+                      <th>Price</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="stallProductsTableBody">
+                    <!-- Populated via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stall Recent Sales Card -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">🧾 Stall Sales Ledger</h3>
+              <span class="badge badge-neutral" id="stallSalesCountBadge">0 Sales</span>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive max-h-350">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>TXN ID</th>
+                      <th>Time</th>
+                      <th>Customer</th>
+                      <th>Product</th>
+                      <th>Qty</th>
+                      <th>Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody id="stallTxnTableBody">
+                    <!-- Populated via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- VIEW 4: LIVE SALES LEADERBOARD -->
+    <!-- ================================================================== -->
+    <section id="view-leaderboard" class="view-panel">
+      <div class="leaderboard-hero">
+        <div class="trophy-badge">🏆 OFFICIAL COMPETITION</div>
+        <h2 class="leaderboard-heading">STALL SALES LEADERBOARD</h2>
+        <p class="leaderboard-sub">
+          Rankings update dynamically in real time every time a student makes a purchase at any stall!
+        </p>
+        <div class="live-pulse-chip">
+          <span class="pulse-dot"></span> Live Automatic Updates
+        </div>
+      </div>
+
+      <!-- Top 3 Podium Cards -->
+      <div class="podium-grid" id="podiumContainer">
+        <!-- Rendered dynamically (Rank 2 Silver, Rank 1 Gold with trophy, Rank 3 Bronze) -->
+      </div>
+
+      <!-- Complete Stalls Ranking Table -->
+      <div class="card mt-4">
+        <div class="card-header">
+          <h3 class="card-title">📊 Complete Stall Standings</h3>
+          <span class="text-sm text-muted" id="leaderboardLastUpdated">Updated just now</span>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th class="text-center" width="80">Rank</th>
+                  <th>Stall Name</th>
+                  <th>Class / Team</th>
+                  <th>Total Sales (₹)</th>
+                  <th>Transactions</th>
+                  <th>Items Sold</th>
+                  <th>Performance</th>
+                </tr>
+              </thead>
+              <tbody id="leaderboardTableBody">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- VIEW 5: ADMIN DASHBOARD -->
+    <!-- ================================================================== -->
+    <section id="view-admin" class="view-panel">
+      <div class="view-header-row">
+        <div>
+          <h2 class="view-heading">⚙️ Event Administration &amp; Control Center</h2>
+          <p class="view-sub">Manage students, bulk allocate ₹100 starting funds, modify stalls, reverse transactions, and inspect analytics.</p>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-success" onclick="app.openBulkAllocateModal()">
+            🎁 Bulk Allocate Starting Balance
+          </button>
+          <button class="btn btn-primary" onclick="app.openAddStudentModal()">
+            ➕ Add Student
+          </button>
+          <button class="btn btn-outline" onclick="app.openAddStallModal()">
+            ➕ Add Stall
+          </button>
+        </div>
+      </div>
+
+      <!-- Admin High-Level KPIs -->
+      <div class="admin-kpi-grid">
+        <div class="kpi-card">
+          <span class="kpi-label">TOTAL STUDENTS</span>
+          <span class="kpi-val" id="adminTotalStudents">0</span>
+          <span class="kpi-sub" id="adminTotalStudentMoney">Circulating: ₹0</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">TOTAL STALLS</span>
+          <span class="kpi-val" id="adminTotalStalls">0</span>
+          <span class="kpi-sub">All active stalls</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">TOTAL EVENT SALES</span>
+          <span class="kpi-val text-accent" id="adminTotalSales">₹0</span>
+          <span class="kpi-sub">Gross stalls revenue</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">TOTAL TRANSACTIONS</span>
+          <span class="kpi-val" id="adminTotalTxns">0</span>
+          <span class="kpi-sub" id="adminTotalItemsSold">0 Items Sold</span>
+        </div>
+      </div>
+
+      <!-- 4 High-Resolution Canvas Charts Grid -->
+      <div class="admin-charts-grid">
+        <!-- Chart 1: Sales by Stall -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">📊 1. Sales Revenue by Stall (₹)</h3>
+          </div>
+          <div class="card-body">
+            <div class="canvas-container" id="chartStallSalesContainer">
+              <canvas id="chartStallSales" height="240"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart 2: Sales Over Time -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">📈 2. Sales Progression Over Time</h3>
+          </div>
+          <div class="card-body">
+            <div class="canvas-container" id="chartSalesOverTimeContainer">
+              <canvas id="chartSalesOverTime" height="240"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart 3: Transactions by Stall -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">🧾 3. Transactions Count by Stall</h3>
+          </div>
+          <div class="card-body">
+            <div class="canvas-container" id="chartStallTxnsContainer">
+              <canvas id="chartStallTxns" height="240"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart 4: Top-selling Products -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">🥇 4. Top-Selling Products (Volume)</h3>
+          </div>
+          <div class="card-body">
+            <div class="canvas-container" id="chartTopProductsContainer">
+              <canvas id="chartTopProducts" height="240"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Student Management Master Table -->
+      <div class="card mt-4">
+        <div class="card-header">
+          <div class="flex-between w-full">
+            <h3 class="card-title">👨‍🎓 Student Wallets Directory</h3>
+            <div class="flex-gap">
+              <input type="text" id="adminStudentSearch" class="form-control form-control-sm" placeholder="Search student name or ID..." oninput="app.filterAdminStudents(this.value)">
+              <button class="btn btn-sm btn-outline" onclick="app.openBulkAllocateModal()">Bulk Give ₹100</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive max-h-350">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Student ID</th>
+                  <th>Student Name</th>
+                  <th>Class / Sec</th>
+                  <th>Starting Balance</th>
+                  <th>Current Balance</th>
+                  <th>Total Spent</th>
+                  <th>Orders</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminStudentTableBody">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stall Management Master Table -->
+      <div class="card mt-4">
+        <div class="card-header">
+          <div class="flex-between w-full">
+            <h3 class="card-title">🏪 Stalls Directory &amp; Products</h3>
+            <button class="btn btn-sm btn-primary" onclick="app.openAddStallModal()">+ New Stall</button>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Stall ID</th>
+                  <th>Stall Name</th>
+                  <th>Student Team</th>
+                  <th>Products (Count &amp; Menu)</th>
+                  <th>Total Sales</th>
+                  <th>Orders</th>
+                  <th>Items Sold</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminStallTableBody">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transaction Master Ledger with Reversal Functionality -->
+      <div class="card mt-4">
+        <div class="card-header">
+          <div class="flex-between w-full">
+            <div>
+              <h3 class="card-title">🧾 Event Transaction Master &amp; Reversal Gate</h3>
+              <p class="text-xs text-muted">Admin can reverse/undo any mistake order to automatically refund student wallet balance and deduct stall sales.</p>
+            </div>
+            <div class="flex-gap">
+              <button class="btn btn-sm btn-primary" onclick="app.openManualTxnModal()">➕ Record Transaction</button>
+              <input type="text" id="adminTxnSearch" class="form-control form-control-sm" placeholder="Filter transactions..." oninput="app.filterAdminTxns(this.value)">
+              <button class="btn btn-sm btn-outline" onclick="app.exportTransactionsCsv()">📥 Export CSV</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive max-h-400">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>TXN ID</th>
+                  <th>Time / Date</th>
+                  <th>Student</th>
+                  <th>Stall</th>
+                  <th>Item &amp; Qty</th>
+                  <th>Amount</th>
+                  <th>Remaining Bal</th>
+                  <th>Status</th>
+                  <th>Admin Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminTxnTableBody">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Danger Zone / Data Management -->
+      <div class="card mt-4 border-danger-subtle">
+        <div class="card-header bg-danger-subtle">
+          <h3 class="card-title text-danger">⚠️ System Maintenance &amp; Reset</h3>
+        </div>
+        <div class="card-body flex-between">
+          <div>
+            <strong>Reset Demo Data</strong>
+            <p class="text-muted text-sm m-0">Reset the event state back to default sample students, stalls, and transactions.</p>
+          </div>
+          <button class="btn btn-danger" onclick="app.resetDemoData()">🔄 Reset to Demo Data</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- VIEW 6: OFFICIAL REPORTS & PRINT VIEW -->
+    <!-- ================================================================== -->
+    <section id="view-reports" class="view-panel">
+      <div class="view-header-row no-print">
+        <div>
+          <h2 class="view-heading">📊 Official Event Report &amp; Analytics</h2>
+          <p class="view-sub">Print-ready business report, audit summary, and CSV downloads for school records.</p>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-outline" onclick="app.exportTransactionsCsv()">
+            📥 Export Transactions CSV
+          </button>
+          <button class="btn btn-outline" onclick="app.exportStallSummaryCsv()">
+            📥 Export Stalls CSV
+          </button>
+          <button class="btn btn-primary" onclick="window.print()">
+            🖨️ Print Official Report
+          </button>
+        </div>
+      </div>
+
+      <!-- Print Sheet / Printable Report Layout -->
+      <div class="printable-report-sheet" id="printReportArea">
+        <div class="report-header">
+          <img src="assets/school-logo.png" alt="Excel School Logo" class="report-logo">
+          <div class="report-header-text">
+            <h2>EXCEL MATRICULATION HR. SEC. SCHOOL</h2>
+            <div class="report-subtitle">School for Excellence • Business &amp; Entrepreneurship Day 2026</div>
+            <h3 class="report-doc-title">OFFICIAL EVENT SALES &amp; DIGITAL WALLET AUDIT REPORT</h3>
+            <div class="report-date" id="reportGeneratedDate">Generated: 2026-09-22</div>
+          </div>
+        </div>
+
+        <!-- Executive Financial Summary -->
+        <div class="report-summary-box">
+          <h4 class="report-box-title">1. Executive Financial Summary</h4>
+          <div class="report-summary-grid">
+            <div class="rep-stat">
+              <span>Total Students Registered:</span>
+              <strong id="repStudentsCount">0</strong>
+            </div>
+            <div class="rep-stat">
+              <span>Total Active Stalls:</span>
+              <strong id="repStallsCount">0</strong>
+            </div>
+            <div class="rep-stat">
+              <span>Total Starting Virtual Money:</span>
+              <strong id="repTotalStarting">₹0</strong>
+            </div>
+            <div class="rep-stat">
+              <span>Total Student Money Spent:</span>
+              <strong class="text-accent" id="repTotalSpent">₹0</strong>
+            </div>
+            <div class="rep-stat">
+              <span>Remaining Student Balances:</span>
+              <strong id="repRemainingCirculation">₹0</strong>
+            </div>
+            <div class="rep-stat">
+              <span>Total Completed Transactions:</span>
+              <strong id="repCompletedTxns">0</strong>
+            </div>
+            <div class="rep-stat">
+              <span>Total Products Sold:</span>
+              <strong id="repItemsSold">0</strong>
+            </div>
+            <div class="rep-stat">
+              <span>Average Order Value:</span>
+              <strong id="repAvgOrderVal">₹0.00</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stall-wise Performance Breakdown -->
+        <div class="report-section mt-4">
+          <h4 class="report-box-title">2. Stall-wise Sales &amp; Revenue Breakdown</h4>
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Stall Name</th>
+                <th>Operating Student Team</th>
+                <th>Total Sales (₹)</th>
+                <th>Transactions</th>
+                <th>Items Sold</th>
+                <th>Avg / Sale</th>
+                <th>% of Total Sales</th>
+              </tr>
+            </thead>
+            <tbody id="reportStallsTableBody">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Signature Block for Official Printouts -->
+        <div class="report-signature-block">
+          <div class="sig-column">
+            <div class="sig-line"></div>
+            <div class="sig-label">Event Student Coordinator</div>
+          </div>
+          <div class="sig-column">
+            <div class="sig-line"></div>
+            <div class="sig-label">Staff In-Charge</div>
+          </div>
+          <div class="sig-column">
+            <div class="sig-line"></div>
+            <div class="sig-label">Principal / Correspondent</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================================================================== -->
+  <!-- BOTTOM NAVIGATION FOR MOBILE DEVICES -->
+  <!-- ==================================================================== -->
+  <nav class="mobile-bottom-nav">
+    <button class="mobile-nav-item active" data-view="home">
+      <span class="m-icon">🏠</span>
+      <span class="m-label">Home</span>
+    </button>
+    <button class="mobile-nav-item" data-view="student">
+      <span class="m-icon">💳</span>
+      <span class="m-label">Wallet</span>
+    </button>
+    <button class="mobile-nav-item" data-view="stall">
+      <span class="m-icon">🏪</span>
+      <span class="m-label">Stall POS</span>
+    </button>
+    <button class="mobile-nav-item" data-view="leaderboard">
+      <span class="m-icon">🏆</span>
+      <span class="m-label">Ranks</span>
+    </button>
+    <button class="mobile-nav-item" data-view="admin">
+      <span class="m-icon">⚙️</span>
+      <span class="m-label">Admin</span>
+    </button>
+  </nav>
+
+  <!-- ==================================================================== -->
+  <!-- MODALS & OVERLAYS -->
+  <!-- ==================================================================== -->
+
+  <!-- Modal 1: Purchase Confirmation Dialog -->
+  <div class="modal-backdrop" id="modalPurchaseConfirm">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Confirm Student Purchase</h3>
+        <button class="modal-close" onclick="app.closeModal('modalPurchaseConfirm')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="confirm-summary-box">
+          <div class="confirm-row">
+            <span>Customer Student:</span>
+            <strong id="confStudentName">Hari (STU001)</strong>
+          </div>
+          <div class="confirm-row">
+            <span>Stall:</span>
+            <strong id="confStallName">Food Stall</strong>
+          </div>
+          <div class="confirm-row">
+            <span>Product Item:</span>
+            <strong id="confProductName">Sandwich</strong>
+          </div>
+          <div class="confirm-row">
+            <span>Quantity:</span>
+            <strong id="confQuantity">1</strong>
+          </div>
+          <div class="confirm-row highlight">
+            <span>Total Deducted:</span>
+            <strong class="text-accent" id="confTotalAmount">₹20</strong>
+          </div>
+          <hr class="modal-divider">
+          <div class="confirm-row">
+            <span>Student Current Balance:</span>
+            <span id="confCurrentBal">₹100</span>
+          </div>
+          <div class="confirm-row">
+            <span>New Remaining Balance:</span>
+            <strong class="text-success" id="confRemainingBal">₹80</strong>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="app.closeModal('modalPurchaseConfirm')">Cancel</button>
+        <button type="button" class="btn btn-primary" id="modalConfirmPurchaseBtn" onclick="app.executePurchase()">
+          Confirm &amp; Deduct ₹0
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Purchase Success Receipt Modal -->
+  <div class="modal-backdrop" id="modalPurchaseSuccess">
+    <div class="modal-dialog modal-sm text-center">
+      <div class="modal-body p-4">
+        <div class="success-animation-circle">✓</div>
+        <h3 class="success-title mt-3">Purchase Successful!</h3>
+        <p class="text-muted text-sm">Transaction recorded and wallet balance updated instantly.</p>
+
+        <div class="receipt-card mt-3">
+          <div class="receipt-row">
+            <span>Receipt No:</span>
+            <strong class="font-mono" id="succTxnId">TXN1008</strong>
+          </div>
+          <div class="receipt-row">
+            <span>Student:</span>
+            <strong id="succStudentName">Hari</strong>
+          </div>
+          <div class="receipt-row">
+            <span>Item:</span>
+            <strong id="succItem">Grilled Sandwich × 1</strong>
+          </div>
+          <div class="receipt-row highlight">
+            <span>Amount Paid:</span>
+            <strong class="text-accent" id="succAmount">₹20</strong>
+          </div>
+          <div class="receipt-row">
+            <span>Remaining Balance:</span>
+            <strong class="text-success" id="succRemainingBal">₹80</strong>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-block mt-4" onclick="app.closeModal('modalPurchaseSuccess')">
+          Done / Next Customer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Camera QR Scanner Modal -->
+  <div class="modal-backdrop" id="modalQrScanner">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">📷 Scan Student QR Pass</h3>
+        <button class="modal-close" onclick="app.closeQrScanner()">&times;</button>
+      </div>
+      <div class="modal-body text-center">
+        <p class="text-sm text-muted mb-3">Position the student's ID or phone QR code inside the camera viewfinder.</p>
+        <div id="qrScannerViewfinder" class="qr-camera-box"></div>
+        <div class="mt-3">
+          <span class="text-xs text-muted">Or pick student manually if camera is not available:</span>
+          <div class="flex-gap mt-2">
+            <select id="quickStudentQrPicker" class="form-control form-control-sm" onchange="app.onQuickStudentPick(this.value)">
+              <option value="">-- Or Quick Select Student --</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="app.closeQrScanner()">Close Camera</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Bulk Allocate Starting Balance -->
+  <div class="modal-backdrop" id="modalBulkAllocate">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">🎁 Bulk Allocate Starting Virtual Balance</h3>
+        <button class="modal-close" onclick="app.closeModal('modalBulkAllocate')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="text-sm text-muted">
+          Give all registered school students a starting virtual balance for the event (e.g. 100 students × ₹100).
+        </p>
+        <div class="form-group mt-3">
+          <label class="form-label" for="bulkAmountInput">Amount per Student (₹):</label>
+          <input type="number" id="bulkAmountInput" class="form-control form-control-lg" value="100" min="10" step="10">
+        </div>
+        <div class="form-group mt-3">
+          <label class="form-label">Allocation Mode:</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="bulkAllocMode" value="set" checked>
+              <span><strong>Set / Reset Starting Balance</strong> (Resets wallet balance to this amount)</span>
+            </label>
+            <label class="radio-label mt-2">
+              <input type="radio" name="bulkAllocMode" value="add">
+              <span><strong>Top Up / Add</strong> (Adds this amount to existing student balances)</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="app.closeModal('modalBulkAllocate')">Cancel</button>
+        <button type="button" class="btn btn-success" onclick="app.executeBulkAllocate()">
+          Confirm Bulk Allocation
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 5: Add Student -->
+  <div class="modal-backdrop" id="modalAddStudent">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">➕ Register New Student</h3>
+        <button class="modal-close" onclick="app.closeModal('modalAddStudent')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="addStudentForm" onsubmit="app.handleAddStudentSubmit(event)">
+          <div class="form-group">
+            <label class="form-label" for="newStudentName">Student Full Name:</label>
+            <input type="text" id="newStudentName" class="form-control" required placeholder="e.g. Hariharan S">
+          </div>
+          <div class="form-row mt-3">
+            <div class="form-group col">
+              <label class="form-label" for="newStudentClass">Class (Grade):</label>
+              <input type="text" id="newStudentClass" class="form-control" required placeholder="e.g. 12">
+            </div>
+            <div class="form-group col">
+              <label class="form-label" for="newStudentSection">Section:</label>
+              <input type="text" id="newStudentSection" class="form-control" required placeholder="e.g. A">
+            </div>
+          </div>
+          <div class="form-group mt-3">
+            <label class="form-label" for="newStudentStartBal">Starting Virtual Balance (₹):</label>
+            <input type="number" id="newStudentStartBal" class="form-control" value="100" min="0" step="10" required>
+          </div>
+          <div class="modal-footer px-0 pb-0 mt-4">
+            <button type="button" class="btn btn-outline" onclick="app.closeModal('modalAddStudent')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Student</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 6: Edit Student -->
+  <div class="modal-backdrop" id="modalEditStudent">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">✏️ Edit Student Details</h3>
+        <button class="modal-close" onclick="app.closeModal('modalEditStudent')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="editStudentForm" onsubmit="app.handleEditStudentSubmit(event)">
+          <input type="hidden" id="editStudentId">
+          <div class="form-group">
+            <label class="form-label" for="editStudentName">Student Full Name:</label>
+            <input type="text" id="editStudentName" class="form-control" required>
+          </div>
+          <div class="form-row mt-3">
+            <div class="form-group col">
+              <label class="form-label" for="editStudentClass">Class (Grade):</label>
+              <input type="text" id="editStudentClass" class="form-control" required>
+            </div>
+            <div class="form-group col">
+              <label class="form-label" for="editStudentSection">Section:</label>
+              <input type="text" id="editStudentSection" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group mt-3">
+            <label class="form-label" for="editStudentBalance">Current Available Balance (₹):</label>
+            <input type="number" id="editStudentBalance" class="form-control" min="0" step="5" required>
+          </div>
+          <div class="modal-footer px-0 pb-0 mt-4">
+            <button type="button" class="btn btn-outline" onclick="app.closeModal('modalEditStudent')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  <!-- Modal: Top Up / Add Student Balance -->
+  <div class="modal-backdrop" id="modalTopUpStudent">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-header">
+        <h3 class="modal-title">💰 Add Funds to Student Wallet</h3>
+        <button class="modal-close" onclick="app.closeModal('modalTopUpStudent')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="topUpStudentForm" onsubmit="app.handleTopUpSubmit(event)">
+          <input type="hidden" id="topUpStudentId">
+          <div class="mb-3 text-center">
+            <h4 id="topUpStudentName" class="font-bold text-navy">Hari (STU001)</h4>
+            <div class="text-sm text-muted">Current Balance: <strong id="topUpCurrentBal" class="text-navy">₹100</strong></div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label font-bold">Quick Select Amount:</label>
+            <div class="flex-gap mb-2">
+              <button type="button" class="btn btn-sm btn-outline flex-1" onclick="app.setTopUpAmount(20)">+ ₹20</button>
+              <button type="button" class="btn btn-sm btn-outline flex-1" onclick="app.setTopUpAmount(50)">+ ₹50</button>
+              <button type="button" class="btn btn-sm btn-outline flex-1" onclick="app.setTopUpAmount(100)">+ ₹100</button>
+            </div>
+          </div>
+
+          <div class="form-group mt-2">
+            <label class="form-label font-bold" for="topUpAmountInput">Add Amount (₹):</label>
+            <input type="number" id="topUpAmountInput" class="form-control form-control-lg" min="5" step="5" value="50" required>
+          </div>
+
+          <div class="modal-footer px-0 pb-0 mt-4">
+            <button type="button" class="btn btn-outline" onclick="app.closeModal('modalTopUpStudent')">Cancel</button>
+            <button type="submit" class="btn btn-success" id="confirmTopUpBtn">Add Funds</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 7: Add Stall -->
+  <div class="modal-backdrop" id="modalAddStall">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">➕ Register New Business Stall</h3>
+        <button class="modal-close" onclick="app.closeModal('modalAddStall')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="addStallForm" onsubmit="app.handleAddStallSubmit(event)">
+          <div class="form-group">
+            <label class="form-label" for="newStallName">Stall Name:</label>
+            <input type="text" id="newStallName" class="form-control" required placeholder="e.g. Sweet Delights">
+          </div>
+          <div class="form-group mt-3">
+            <label class="form-label" for="newStallTeam">Student Team / In-Charge Class:</label>
+            <input type="text" id="newStallTeam" class="form-control" required placeholder="e.g. Team Bakers (Grade 10)">
+          </div>
+          <div class="form-group mt-3">
+            <label class="form-label">Initial Products (Name &amp; Price):</label>
+            <div id="newStallProductsList">
+              <div class="form-row flex-gap mb-2">
+                <input type="text" class="form-control p-name-input" placeholder="Item Name (e.g. Cupcake)" required>
+                <input type="number" class="form-control p-price-input" placeholder="Price (₹)" min="1" style="max-width: 100px;" required>
+              </div>
+            </div>
+            <button type="button" class="btn btn-xs btn-outline mt-1" onclick="app.addNewStallProductRow()">+ Add Another Product</button>
+          </div>
+          <div class="modal-footer px-0 pb-0 mt-4">
+            <button type="button" class="btn btn-outline" onclick="app.closeModal('modalAddStall')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Create Stall</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 8: Edit Stall -->
+  <div class="modal-backdrop" id="modalEditStall">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">✏️ Edit Stall Details</h3>
+        <button class="modal-close" onclick="app.closeModal('modalEditStall')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="editStallForm" onsubmit="app.handleEditStallSubmit(event)">
+          <input type="hidden" id="editStallId">
+          <div class="form-group">
+            <label class="form-label" for="editStallName">Stall Name:</label>
+            <input type="text" id="editStallName" class="form-control" required>
+          </div>
+          <div class="form-group mt-3">
+            <label class="form-label" for="editStallTeam">Student Team / In-Charge Class:</label>
+            <input type="text" id="editStallTeam" class="form-control" required>
+          </div>
+          <div class="modal-footer px-0 pb-0 mt-4">
+            <button type="button" class="btn btn-outline" onclick="app.closeModal('modalEditStall')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Update Stall</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 9: Add Product to Stall -->
+  <div class="modal-backdrop" id="modalAddProduct">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">➕ Add Product to Stall</h3>
+        <button class="modal-close" onclick="app.closeModal('modalAddProduct')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="addProductForm" onsubmit="app.handleAddProductSubmit(event)">
+          <input type="hidden" id="addProductStallId">
+          <div class="form-group">
+            <label class="form-label">Stall:</label>
+            <div id="addProductStallName" class="font-bold text-navy">Stall Name</div>
+          </div>
+          <div class="form-group mt-3">
+            <label class="form-label" for="newProductName">Product / Item Name:</label>
+            <input type="text" id="newProductName" class="form-control" required placeholder="e.g. Fruit Salad">
+          </div>
+          <div class="form-group mt-3">
+            <label class="form-label" for="newProductPrice">Price (₹):</label>
+            <input type="number" id="newProductPrice" class="form-control" min="1" step="1" required placeholder="e.g. 25">
+          </div>
+          <div class="modal-footer px-0 pb-0 mt-4">
+            <button type="button" class="btn btn-outline" onclick="app.closeModal('modalAddProduct')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Add Product</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 10: Edit Product Price -->
+  <div class="modal-backdrop" id="modalEditProduct">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">✏️ Edit Product &amp; Price</h3>
+        <button class="modal-close" onclick="app.closeModal('modalEditProduct')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="editProductForm" onsubmit="app.handleEditProductSubmit(event)">
+          <input type="hidden" id="editProductStallId">
+          <input type="hidden" id="editProductId">
+          <div class="form-group">
+            <label class="form-label" for="editProductName">Product Name:</label>
+            <input type="text" id="editProductName" class="form-control" required>
+          </div>
+          <div class="form-group mt-3">
+            <label class="form-label" for="editProductPrice">Price (₹):</label>
+            <input type="number" id="editProductPrice" class="form-control" min="1" step="1" required>
+          </div>
+          <div class="modal-footer px-0 pb-0 mt-4">
+            <button type="button" class="btn btn-outline" onclick="app.closeModal('modalEditProduct')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Price</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 11: Stall QR Code Display -->
+  <div class="modal-backdrop" id="modalStallQr">
+    <div class="modal-dialog modal-sm text-center">
+      <div class="modal-header">
+        <h3 class="modal-title">🏪 Stall QR Code</h3>
+        <button class="modal-close" onclick="app.closeModal('modalStallQr')">&times;</button>
+      </div>
+      <div class="modal-body text-center">
+        <h4 id="stallQrModalName" class="text-navy font-bold">Mystery Shop</h4>
+        <p id="stallQrModalTeam" class="text-muted text-xs mb-3">Team Sphinx (Grade 12)</p>
+        <div class="qr-canvas-wrapper" id="stallQrCanvas"></div>
+        <div class="mt-2 font-mono font-bold text-navy" id="stallQrCodeText">STALL01</div>
+        <p class="text-xs text-muted mt-2">Display this QR code at your stall entrance for quick reference!</p>
+        <div class="mt-3">
+          <button class="btn btn-sm btn-outline" onclick="window.print()">🖨️ Print Stall Standee</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-block" onclick="app.closeModal('modalStallQr')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 12: Record Manual Transaction -->
+  <div class="modal-backdrop" id="modalManualTxn">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">➕ Record Manual Cashless Transaction</h3>
+        <button class="modal-close" onclick="app.closeModal('modalManualTxn')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="manualTxnForm" onsubmit="app.handleManualTxnSubmit(event)">
+          <div class="form-group">
+            <label class="form-label font-bold" for="manTxnStudentSelect">1. Select Student:</label>
+            <select id="manTxnStudentSelect" class="form-control form-control-lg" required onchange="app.onManTxnStudentChange(this.value)">
+              <!-- Populated via JS -->
+            </select>
+            <div id="manTxnStudentBalHint" class="text-xs text-muted mt-1">Available Balance: ₹0</div>
+          </div>
+
+          <div class="form-group mt-3">
+            <label class="form-label font-bold" for="manTxnStallSelect">2. Select Stall:</label>
+            <select id="manTxnStallSelect" class="form-control form-control-lg" required>
+              <!-- Populated via JS -->
+            </select>
+          </div>
+
+          <div class="form-row mt-3">
+            <div class="form-group col">
+              <label class="form-label font-bold" for="manTxnItemName">3. Product / Item Description:</label>
+              <input type="text" id="manTxnItemName" class="form-control" required placeholder="e.g. Special Snack Combo">
+            </div>
+            <div class="form-group col" style="max-width: 140px;">
+              <label class="form-label font-bold" for="manTxnPrice">Amount (₹):</label>
+              <input type="number" id="manTxnPrice" class="form-control" min="1" step="1" required placeholder="₹">
+            </div>
+          </div>
+
+          <div class="modal-footer px-0 pb-0 mt-4">
+            <button type="button" class="btn btn-outline" onclick="app.closeModal('modalManualTxn')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Confirm &amp; Record Transaction</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 13: Global Search Overlay -->
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-container">
+      <div class="search-input-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="globalSearchInput" placeholder="Search student name, ID, stall, product, or transaction..." oninput="app.handleGlobalSearch(this.value)">
+        <button class="search-close-btn" onclick="app.closeSearch()">&times;</button>
+      </div>
+      <div class="search-results-area" id="searchResultsArea">
+        <div class="search-empty-hint">Type above to search students, stalls, products, or transactions...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio Chimes Synthesizer Script & Application Core -->
+  <script src="app.js"></script>
+</body>
+</html>
