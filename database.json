@@ -1,0 +1,466 @@
+{
+    "event":  {
+                  "name":  "Excel Annual Business Bazaar \u0026 Entrepreneurship Stall Day",
+                  "school":  "Excel Matriculation Hr. Sec. School",
+                  "motto":  "School for Excellence",
+                  "date":  "2026-09-22",
+                  "currency":  "₹",
+                  "defaultStartingBalance":  100
+              },
+    "students":  [
+                     {
+                         "id":  "STU001",
+                         "name":  "Hari",
+                         "class":  "12",
+                         "section":  "A",
+                         "startingBalance":  120,
+                         "balance":  100,
+                         "totalSpent":  0,
+                         "transactionsCount":  0
+                     },
+                     {
+                         "id":  "STU002",
+                         "name":  "Arun",
+                         "class":  "11",
+                         "section":  "B",
+                         "startingBalance":  100,
+                         "balance":  100,
+                         "totalSpent":  0,
+                         "transactionsCount":  0
+                     },
+                     {
+                         "id":  "STU003",
+                         "name":  "Kavi",
+                         "class":  "10",
+                         "section":  "A",
+                         "startingBalance":  100,
+                         "balance":  100,
+                         "totalSpent":  0,
+                         "transactionsCount":  0
+                     },
+                     {
+                         "id":  "STU004",
+                         "name":  "Maddy",
+                         "class":  "12",
+                         "section":  "B",
+                         "startingBalance":  100,
+                         "balance":  100,
+                         "totalSpent":  0,
+                         "transactionsCount":  0
+                     },
+                     {
+                         "id":  "STU005",
+                         "name":  "Rahul",
+                         "class":  "11",
+                         "section":  "A",
+                         "startingBalance":  100,
+                         "balance":  100,
+                         "totalSpent":  0,
+                         "transactionsCount":  0
+                     },
+                     {
+                         "id":  "STU006",
+                         "name":  "Priya",
+                         "class":  "10",
+                         "section":  "B",
+                         "startingBalance":  100,
+                         "balance":  100,
+                         "totalSpent":  0,
+                         "transactionsCount":  0
+                     },
+                     {
+                         "id":  "STU007",
+                         "name":  "Divya",
+                         "class":  "12",
+                         "section":  "A",
+                         "startingBalance":  100,
+                         "balance":  100,
+                         "totalSpent":  0,
+                         "transactionsCount":  0
+                     },
+                     {
+                         "id":  "STU008",
+                         "name":  "Sanjay",
+                         "class":  "11",
+                         "section":  "C",
+                         "startingBalance":  100,
+                         "balance":  100,
+                         "totalSpent":  0,
+                         "transactionsCount":  0
+                     }
+                 ],
+    "stalls":  [
+                   {
+                       "id":  "STALL01",
+                       "name":  "Mystery Shop",
+                       "team":  "Team Sphinx (Grade 12)",
+                       "totalSales":  70,
+                       "transactionsCount":  2,
+                       "itemsSold":  3,
+                       "products":  [
+                                        {
+                                            "id":  "P01",
+                                            "name":  "Secret Envelope",
+                                            "price":  20
+                                        },
+                                        {
+                                            "id":  "P02",
+                                            "name":  "Mystery Gift Box",
+                                            "price":  30
+                                        },
+                                        {
+                                            "id":  "P03",
+                                            "name":  "Mega Lucky Dip",
+                                            "price":  50
+                                        }
+                                    ]
+                   },
+                   {
+                       "id":  "STALL02",
+                       "name":  "Food Stall",
+                       "team":  "Master Chefs (Grade 11)",
+                       "totalSales":  40,
+                       "transactionsCount":  3,
+                       "itemsSold":  2,
+                       "products":  [
+                                        {
+                                            "id":  "P04",
+                                            "name":  "Grilled Sandwich",
+                                            "price":  20
+                                        },
+                                        {
+                                            "id":  "P05",
+                                            "name":  "Veg Burger",
+                                            "price":  30
+                                        },
+                                        {
+                                            "id":  "P06",
+                                            "name":  "Crispy Samosa",
+                                            "price":  10
+                                        },
+                                        {
+                                            "id":  "P07",
+                                            "name":  "Spring Rolls",
+                                            "price":  25
+                                        }
+                                    ]
+                   },
+                   {
+                       "id":  "STALL03",
+                       "name":  "Juice Stall",
+                       "team":  "Citrus Spark (Grade 10)",
+                       "totalSales":  20,
+                       "transactionsCount":  1,
+                       "itemsSold":  1,
+                       "products":  [
+                                        {
+                                            "id":  "P08",
+                                            "name":  "Fresh Orange Juice",
+                                            "price":  20
+                                        },
+                                        {
+                                            "id":  "P09",
+                                            "name":  "Lemon Mint Cooler",
+                                            "price":  15
+                                        },
+                                        {
+                                            "id":  "P10",
+                                            "name":  "Mango Shake",
+                                            "price":  25
+                                        },
+                                        {
+                                            "id":  "P11",
+                                            "name":  "Rose Milk",
+                                            "price":  20
+                                        }
+                                    ]
+                   },
+                   {
+                       "id":  "STALL04",
+                       "name":  "Mehendi Stall",
+                       "team":  "Henna Artists (Grade 12)",
+                       "totalSales":  35,
+                       "transactionsCount":  1,
+                       "itemsSold":  1,
+                       "products":  [
+                                        {
+                                            "id":  "P12",
+                                            "name":  "Simple Palm Design",
+                                            "price":  25
+                                        },
+                                        {
+                                            "id":  "P13",
+                                            "name":  "Arabic Floral Art",
+                                            "price":  35
+                                        },
+                                        {
+                                            "id":  "P14",
+                                            "name":  "Full Hand Bridal Style",
+                                            "price":  50
+                                        }
+                                    ]
+                   },
+                   {
+                       "id":  "STALL05",
+                       "name":  "Games Stall",
+                       "team":  "Fun Zone (Grade 11)",
+                       "totalSales":  20,
+                       "transactionsCount":  1,
+                       "itemsSold":  2,
+                       "products":  [
+                                        {
+                                            "id":  "P15",
+                                            "name":  "Ring Toss Challenge",
+                                            "price":  10
+                                        },
+                                        {
+                                            "id":  "P16",
+                                            "name":  "Balloon Dart (3 Shots)",
+                                            "price":  15
+                                        },
+                                        {
+                                            "id":  "P17",
+                                            "name":  "Knock The Can",
+                                            "price":  10
+                                        },
+                                        {
+                                            "id":  "P18",
+                                            "name":  "Mini Basketball",
+                                            "price":  20
+                                        }
+                                    ]
+                   },
+                   {
+                       "id":  "STALL06",
+                       "name":  "Secret Envelope",
+                       "team":  "Golden Envelopes (Grade 10)",
+                       "totalSales":  0,
+                       "transactionsCount":  0,
+                       "itemsSold":  0,
+                       "products":  [
+                                        {
+                                            "id":  "P19",
+                                            "name":  "Bronze Surprise Envelope",
+                                            "price":  10
+                                        },
+                                        {
+                                            "id":  "P20",
+                                            "name":  "Silver Surprise Envelope",
+                                            "price":  20
+                                        },
+                                        {
+                                            "id":  "P21",
+                                            "name":  "Gold Surprise Envelope",
+                                            "price":  30
+                                        }
+                                    ]
+                   },
+                   {
+                       "id":  "STALL07",
+                       "name":  "Crafts Stall",
+                       "team":  "Creative Hands (Grade 10)",
+                       "totalSales":  0,
+                       "transactionsCount":  0,
+                       "itemsSold":  0,
+                       "products":  [
+                                        {
+                                            "id":  "P22",
+                                            "name":  "Handmade Bookmark",
+                                            "price":  15
+                                        },
+                                        {
+                                            "id":  "P23",
+                                            "name":  "Origami Flower Bouquet",
+                                            "price":  20
+                                        },
+                                        {
+                                            "id":  "P24",
+                                            "name":  "Friendship Band",
+                                            "price":  10
+                                        },
+                                        {
+                                            "id":  "P25",
+                                            "name":  "Beaded Bracelet",
+                                            "price":  25
+                                        }
+                                    ]
+                   },
+                   {
+                       "id":  "STALL08",
+                       "name":  "Gift Stall",
+                       "team":  "Treasure Box (Grade 12)",
+                       "totalSales":  0,
+                       "transactionsCount":  0,
+                       "itemsSold":  0,
+                       "products":  [
+                                        {
+                                            "id":  "P26",
+                                            "name":  "Excel School Keychain",
+                                            "price":  20
+                                        },
+                                        {
+                                            "id":  "P27",
+                                            "name":  "Executive Pen Set",
+                                            "price":  30
+                                        },
+                                        {
+                                            "id":  "P28",
+                                            "name":  "Desk Photo Frame",
+                                            "price":  40
+                                        }
+                                    ]
+                   }
+               ],
+    "transactions":  [
+                         {
+                             "id":  "TXN1010",
+                             "studentId":  "STU001",
+                             "studentName":  "Hari",
+                             "stallId":  "STALL02",
+                             "stallName":  "Food Stall",
+                             "product":  "Handmade Greeting Card",
+                             "quantity":  1,
+                             "price":  25,
+                             "amount":  25,
+                             "time":  "10:19 PM",
+                             "date":  "2026-09-22",
+                             "remainingBalance":  95,
+                             "status":  "REVERSED"
+                         },
+                         {
+                             "id":  "TXN1009",
+                             "studentId":  "STU001",
+                             "studentName":  "Hari",
+                             "stallId":  "STALL01",
+                             "stallName":  "Mystery Shop",
+                             "product":  "Mystery Gift Box",
+                             "quantity":  1,
+                             "price":  30,
+                             "amount":  30,
+                             "time":  "09:47 PM",
+                             "date":  "2026-09-22",
+                             "remainingBalance":  50,
+                             "status":  "REVERSED"
+                         },
+                         {
+                             "id":  "TXN1008",
+                             "studentId":  "STU001",
+                             "studentName":  "Hari",
+                             "stallId":  "STALL02",
+                             "stallName":  "Food Stall",
+                             "product":  "Grilled Sandwich",
+                             "quantity":  1,
+                             "price":  20,
+                             "amount":  20,
+                             "time":  "09:47 PM",
+                             "date":  "2026-09-22",
+                             "remainingBalance":  80,
+                             "status":  "COMPLETED"
+                         },
+                         {
+                             "id":  "TXN1007",
+                             "studentId":  "STU001",
+                             "studentName":  "Hari",
+                             "stallId":  "STALL02",
+                             "stallName":  "Food Stall",
+                             "product":  "Grilled Sandwich",
+                             "quantity":  1,
+                             "price":  20,
+                             "amount":  20,
+                             "time":  "09:19 PM",
+                             "date":  "2026-09-22",
+                             "remainingBalance":  80,
+                             "status":  "REVERSED"
+                         },
+                         {
+                             "id":  "TXN1001",
+                             "studentId":  "STU002",
+                             "studentName":  "Arun",
+                             "stallId":  "STALL02",
+                             "stallName":  "Food Stall",
+                             "product":  "Grilled Sandwich",
+                             "quantity":  1,
+                             "price":  20,
+                             "amount":  20,
+                             "time":  "10:15 AM",
+                             "date":  "2026-09-22",
+                             "remainingBalance":  80,
+                             "status":  "COMPLETED"
+                         },
+                         {
+                             "id":  "TXN1002",
+                             "studentId":  "STU003",
+                             "studentName":  "Kavi",
+                             "stallId":  "STALL01",
+                             "stallName":  "Mystery Shop",
+                             "product":  "Mystery Gift Box",
+                             "quantity":  1,
+                             "price":  30,
+                             "amount":  30,
+                             "time":  "10:22 AM",
+                             "date":  "2026-09-22",
+                             "remainingBalance":  70,
+                             "status":  "COMPLETED"
+                         },
+                         {
+                             "id":  "TXN1003",
+                             "studentId":  "STU004",
+                             "studentName":  "Maddy",
+                             "stallId":  "STALL05",
+                             "stallName":  "Games Stall",
+                             "product":  "Ring Toss Challenge",
+                             "quantity":  2,
+                             "price":  10,
+                             "amount":  20,
+                             "time":  "10:35 AM",
+                             "date":  "2026-09-22",
+                             "remainingBalance":  80,
+                             "status":  "COMPLETED"
+                         },
+                         {
+                             "id":  "TXN1004",
+                             "studentId":  "STU005",
+                             "studentName":  "Rahul",
+                             "stallId":  "STALL03",
+                             "stallName":  "Juice Stall",
+                             "product":  "Fresh Orange Juice",
+                             "quantity":  1,
+                             "price":  20,
+                             "amount":  20,
+                             "time":  "10:42 AM",
+                             "date":  "2026-09-22",
+                             "remainingBalance":  80,
+                             "status":  "COMPLETED"
+                         },
+                         {
+                             "id":  "TXN1005",
+                             "studentId":  "STU006",
+                             "studentName":  "Priya",
+                             "stallId":  "STALL04",
+                             "stallName":  "Mehendi Stall",
+                             "product":  "Arabic Floral Art",
+                             "quantity":  1,
+                             "price":  35,
+                             "amount":  35,
+                             "time":  "10:50 AM",
+                             "date":  "2026-09-22",
+                             "remainingBalance":  65,
+                             "status":  "COMPLETED"
+                         },
+                         {
+                             "id":  "TXN1006",
+                             "studentId":  "STU007",
+                             "studentName":  "Divya",
+                             "stallId":  "STALL01",
+                             "stallName":  "Mystery Shop",
+                             "product":  "Secret Envelope",
+                             "quantity":  2,
+                             "price":  20,
+                             "amount":  40,
+                             "time":  "11:05 AM",
+                             "date":  "2026-09-22",
+                             "remainingBalance":  60,
+                             "status":  "COMPLETED"
+                         }
+                     ]
+}
