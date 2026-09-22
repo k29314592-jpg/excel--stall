@@ -1,0 +1,11 @@
+@echo off
+title Excel School Stall - Digital Wallet & Sales Tracker
+color 1F
+cls
+echo =====================================================================
+echo    EXCEL MATRICULATION HR. SEC. SCHOOL - DIGITAL WALLET SERVER       
+echo =====================================================================
+echo  Starting server...
+echo.
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0server.ps1" -Port 8888
+pause
